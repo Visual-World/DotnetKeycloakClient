@@ -1,0 +1,5 @@
+root = true
+
+[{/OpenApi/**, /obj/**}]
+generated_code = true
+ij_formatter_enabled = false
