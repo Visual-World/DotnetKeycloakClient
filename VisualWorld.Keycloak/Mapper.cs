@@ -22,6 +22,7 @@ public static class Mapper
                     .Select(f => f.ToKeycloakFederatedIdentity())
                     .ToList()
                 : Array.Empty<KeycloakFederatedIdentity>(),
+            RequiredActions = userRepresentation.RequiredActions ?? Array.Empty<string>(),
         };
         
         return keycloakUser;

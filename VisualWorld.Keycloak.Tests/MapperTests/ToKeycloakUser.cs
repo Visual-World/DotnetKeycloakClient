@@ -43,6 +43,7 @@ public sealed class ToKeycloakUser
         mapped.FirstName.Should().Be(userRepresentation.FirstName);
         mapped.LastName.Should().Be(userRepresentation.LastName);
         mapped.FederatedIdentities.Should().HaveCount(userRepresentation.FederatedIdentities.Count);
+        mapped.RequiredActions.Should().BeEquivalentTo(userRepresentation.RequiredActions);
     }
 
     [DebuggerStepThrough]
