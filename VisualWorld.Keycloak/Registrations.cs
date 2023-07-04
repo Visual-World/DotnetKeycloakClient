@@ -6,7 +6,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class Registrations
 {
-    public static IServiceCollection AddKeycloakClient(this IServiceCollection services, Action<KeycloakOptions>? configure = null)
+    public static IServiceCollection AddKeycloak(this IServiceCollection services, Action<KeycloakOptions>? configure = null)
     {
         var keycloakOptionsBuilder = services.AddOptions<KeycloakOptions>();
         if (configure is not null)
@@ -27,7 +27,7 @@ public static class Registrations
         });
         services.AddKeycloakApiClient().AddClientAccessTokenHandler();
 
-        return services;
+        return services.AddScoped<IKeycloak, Keycloak>();
     }
 
     private static IHttpClientBuilder AddKeycloakApiClient(this IServiceCollection services)
