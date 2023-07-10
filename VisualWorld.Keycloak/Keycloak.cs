@@ -83,7 +83,6 @@ public class Keycloak : IKeycloak
                 Email = createKeycloakUserRequest.UsernameAndEmail, 
                 Enabled = createKeycloakUserRequest.Enabled,
                 RequiredActions = createKeycloakUserRequest.RequiredActions,
-                RealmRoles = createKeycloakUserRequest.Roles,
             },
             keycloakOptions.Value.Realm,
             cancellationToken);
