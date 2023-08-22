@@ -9,10 +9,14 @@ namespace VisualWorld.Keycloak.Tests.KeycloakTests;
 public sealed class SendVerifyEmailAsync : Infrastructure
 {
     private string userId;
+    private string clientId;
+    private string redirectUri;
 
     public SendVerifyEmailAsync()
     {
         userId = Fixture.Create<string>();
+        clientId = Fixture.Create<string>();
+        redirectUri = Fixture.Create<string>();
     }
 
     [Theory]
@@ -42,13 +46,13 @@ public sealed class SendVerifyEmailAsync : Infrastructure
                 => m.SendVerifyEmailAsync(
                     KeycloakOptions.Realm,
                     userId,
-                    null, // client_id
-                    null, // redirect_uri
+                    clientId, // client_id
+                    redirectUri, // redirect_uri
                     It.IsAny<CancellationToken>()
                 ),
             Times.Once);
     }
 
     [DebuggerStepThrough]
-    private Task CallAsync() => Keycloak.SendVerifyEmailAsync(userId);
+    private Task CallAsync() => Keycloak.SendVerifyEmailAsync(userId, clientId, redirectUri);
 }

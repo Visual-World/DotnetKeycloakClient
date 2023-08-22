@@ -17,8 +17,11 @@ public class Keycloak : IKeycloak
     }
     
     public async Task SendVerifyEmailAsync(
-        string userId,
-        CancellationToken cancellationToken = default)
+        string userId, 
+        string? clientId = null,
+        string? redirectUri = null,
+        CancellationToken cancellationToken = default
+    )
     {
         if (string.IsNullOrWhiteSpace(userId))
         {
@@ -28,6 +31,8 @@ public class Keycloak : IKeycloak
         await keycloakClient.SendVerifyEmailAsync(
             keycloakOptions.Value.Realm,
             userId,
+            clientId,
+            redirectUri,
             cancellationToken: cancellationToken);
     }
 
