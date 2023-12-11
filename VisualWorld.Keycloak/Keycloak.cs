@@ -84,8 +84,8 @@ public class Keycloak : IKeycloak
         await keycloakClient.UsersPOSTAsync(
             new UserRepresentation
             {
-                Username = createKeycloakUserRequest.UsernameAndEmail, 
-                Email = createKeycloakUserRequest.UsernameAndEmail, 
+                Username = createKeycloakUserRequest.Username, 
+                Email = createKeycloakUserRequest.Email, 
                 Enabled = createKeycloakUserRequest.Enabled,
                 RequiredActions = createKeycloakUserRequest.RequiredActions,
             },

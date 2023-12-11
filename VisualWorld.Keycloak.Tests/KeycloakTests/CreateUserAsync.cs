@@ -38,8 +38,8 @@ public sealed class CreateUserAsync : Infrastructure
         KeycloakClientMock.Verify(m
                 => m.UsersPOSTAsync(
                     It.Is<UserRepresentation>(ur
-                        => ur.Username == createKeycloakUserRequest.UsernameAndEmail
-                           && ur.Email == createKeycloakUserRequest.UsernameAndEmail
+                        => ur.Username == createKeycloakUserRequest.Username
+                           && ur.Email == createKeycloakUserRequest.Email
                            && ur.Enabled == createKeycloakUserRequest.Enabled
                            && ur.RequiredActions == createKeycloakUserRequest.RequiredActions),
                     KeycloakOptions.Realm,
