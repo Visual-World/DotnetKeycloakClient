@@ -64,8 +64,7 @@ public sealed class GetUsersMapAsync : Infrastructure
         // Assert
         emailAddressesMap.Should().NotBeEmpty()
             .And.HaveCount(1)
-            .And.ContainSingle(i => i.Email == userWithEmailAddressAndUsername.Email
-                                    && i.UserId == userWithEmailAddressAndUsername.Id
+            .And.ContainSingle(i => i.UserId == userWithEmailAddressAndUsername.Id
                                     && i.Username == userWithEmailAddressAndUsername.Username);
         
         KeycloakClientMock.Verify(m
@@ -90,5 +89,5 @@ public sealed class GetUsersMapAsync : Infrastructure
     }
 
     [DebuggerStepThrough]
-    private Task<IReadOnlySet<(string? Email, string? Username, string UserId)>> CallAsync() => Keycloak.GetUsersMapAsync(enabled);
+    private Task<IReadOnlySet<(string Username, string UserId)>> CallAsync() => Keycloak.GetUsersMapAsync(enabled);
 }
