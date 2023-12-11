@@ -6,27 +6,27 @@ using Xunit;
 
 namespace VisualWorld.Keycloak.Tests.KeycloakTests;
 
-public sealed class GetUserAsync : Infrastructure
+public sealed class GetUserByUsernameAsync : Infrastructure
 {
-    private string usernameAndEmail;
+    private string username;
 
-    public GetUserAsync()
+    public GetUserByUsernameAsync()
     {
-        usernameAndEmail = Fixture.Create<string>();
+        username = Fixture.Create<string>();
     }
 
     [Theory]
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public async Task ThrowsArgumentExceptionIfUsernameAndEmailIs(string usernameAndEmail)
+    public async Task ThrowsArgumentExceptionIfUsernameAndEmailIs(string username)
     {
         // Arrange
-        this.usernameAndEmail = usernameAndEmail;
+        this.username = username;
         
         // Act, Assert
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => CallAsync());
-        exception.ParamName.Should().Be("usernameAndEmail");
+        exception.ParamName.Should().Be("username");
         
         KeycloakClientMock.Invocations.Should().BeEmpty();
     }
@@ -38,7 +38,7 @@ public sealed class GetUserAsync : Infrastructure
         KeycloakClientMock.Setup(m => m.UsersAll3Async(
                 KeycloakOptions.Realm,
                 null, // briefRepresentation
-                usernameAndEmail,
+                null,
                 null, // emailVerified
                 true, // enabled
                 null, // exact
@@ -50,7 +50,7 @@ public sealed class GetUserAsync : Infrastructure
                 1, // max
                 null, // q
                 null, // search
-                usernameAndEmail,
+                username,
                 It.IsAny<CancellationToken>()
             )
         ).ReturnsAsync(Array.Empty<UserRepresentation>());
@@ -65,7 +65,7 @@ public sealed class GetUserAsync : Infrastructure
                 => m.UsersAll3Async(
                     KeycloakOptions.Realm,
                     null, // briefRepresentation
-                    usernameAndEmail,
+                    null,
                     null, // emailVerified
                     true, // enabled
                     null, // exact
@@ -77,7 +77,7 @@ public sealed class GetUserAsync : Infrastructure
                     1, // max
                     null, // q
                     null, // search
-                    usernameAndEmail,
+                    username,
                     It.IsAny<CancellationToken>()
                 ),
             Times.Once);
@@ -90,7 +90,7 @@ public sealed class GetUserAsync : Infrastructure
         KeycloakClientMock.Setup(m => m.UsersAll3Async(
             KeycloakOptions.Realm,
             null, // briefRepresentation
-            usernameAndEmail,
+            null,
             null, // emailVerified
             true, // enabled
             null, // exact
@@ -102,7 +102,7 @@ public sealed class GetUserAsync : Infrastructure
             1, // max
             null, // q
             null, // search
-            usernameAndEmail,
+            username,
             It.IsAny<CancellationToken>()
             )
         ).ReturnsAsync(Fixture.CreateMany<UserRepresentation>(1).ToList);
@@ -117,7 +117,7 @@ public sealed class GetUserAsync : Infrastructure
                 => m.UsersAll3Async(
                     KeycloakOptions.Realm,
                     null, // briefRepresentation
-                    usernameAndEmail,
+                    null,
                     null, // emailVerified
                     true, // enabled
                     null, // exact
@@ -129,12 +129,12 @@ public sealed class GetUserAsync : Infrastructure
                     1, // max
                     null, // q
                     null, // search
-                    usernameAndEmail,
+                    username,
                     It.IsAny<CancellationToken>()
                 ),
             Times.Once);
     }
 
     [DebuggerStepThrough]
-    private Task<KeycloakUser?> CallAsync() => Keycloak.GetUserAsync(usernameAndEmail);
+    private Task<KeycloakUser?> CallAsync() => Keycloak.GetUserByUsernameAsync(username);
 }

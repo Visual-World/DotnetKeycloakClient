@@ -8,8 +8,8 @@ public interface IKeycloak
         CancellationToken cancellationToken = default
     );
 
-    Task<KeycloakUser?> GetUserAsync(
-        string usernameAndEmail,
+    Task<KeycloakUser?> GetUserByUsernameAsync(
+        string username,
         CancellationToken cancellationToken = default);
     
     Task<KeycloakUser> GetUserByIdAsync(string userId,

@@ -36,21 +36,20 @@ public class Keycloak : IKeycloak
             cancellationToken: cancellationToken);
     }
 
-    public async Task<KeycloakUser?> GetUserAsync(
-        string usernameAndEmail,
+    public async Task<KeycloakUser?> GetUserByUsernameAsync(
+        string username,
         CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(usernameAndEmail))
+        if (string.IsNullOrWhiteSpace(username))
         {
-            throw new ArgumentException("Value cannot be null or whitespace.", nameof(usernameAndEmail));
+            throw new ArgumentException("Value cannot be null or whitespace.", nameof(username));
         }
         
         var users = await keycloakClient.UsersAll3Async(
             keycloakOptions.Value.Realm,
             enabled: true,
             max: 1,
-            username: usernameAndEmail,
-            email: usernameAndEmail,
+            username: username,
             cancellationToken: cancellationToken);
 
         return users.SingleOrDefault()?.ToKeycloakUser();
