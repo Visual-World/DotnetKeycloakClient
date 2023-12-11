@@ -93,7 +93,7 @@ public class Keycloak : IKeycloak
             cancellationToken);
     }
 
-    public async Task<IReadOnlySet<(string Email, string UserId)>> GetEmailAddressesMapAsync(
+    public async Task<IReadOnlySet<(string? Email, string? Username, string UserId)>> GetUsersMapAsync(
         bool? enabled,
         CancellationToken cancellationToken = default)
     {
@@ -103,9 +103,9 @@ public class Keycloak : IKeycloak
             enabled: enabled,
             cancellationToken: cancellationToken);
 
-        return users.Where(u => !string.IsNullOrWhiteSpace(u.Email))
-            .Select(u => (u.Email!, u.Id!))
-            .ToHashSet();
+        return users
+            .Where(u => !string.IsNullOrWhiteSpace(u.Email) || !string.IsNullOrWhiteSpace(u.Username))
+            .Select(u => (u.Email, u.Username, u.Id!)).ToHashSet();
     }
 
     public async Task DeleteUserAsync(string userId, CancellationToken cancellationToken = default)

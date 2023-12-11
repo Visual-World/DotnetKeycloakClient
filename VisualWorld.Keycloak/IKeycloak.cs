@@ -19,7 +19,7 @@ public interface IKeycloak
         CreateKeycloakUserRequest createKeycloakUserRequest,
         CancellationToken cancellationToken = default);
 
-    Task<IReadOnlySet<(string Email, string UserId)>> GetEmailAddressesMapAsync(
+    Task<IReadOnlySet<(string? Email, string? Username, string UserId)>> GetUsersMapAsync(
         bool? enabled,
         CancellationToken cancellationToken = default);
 

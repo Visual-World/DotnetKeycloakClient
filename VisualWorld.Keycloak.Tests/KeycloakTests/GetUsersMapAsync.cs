@@ -6,11 +6,11 @@ using Xunit;
 
 namespace VisualWorld.Keycloak.Tests.KeycloakTests;
 
-public sealed class GetEmailAddressesMapAsync : Infrastructure
+public sealed class GetUsersMapAsync : Infrastructure
 {
     private bool? enabled;
 
-    public GetEmailAddressesMapAsync()
+    public GetUsersMapAsync()
     {
         enabled = Fixture.Create<bool?>();
     }
@@ -19,15 +19,18 @@ public sealed class GetEmailAddressesMapAsync : Infrastructure
     public async Task CallsTheKeycloakClientAndReturnsAnyWithAnEmailAddress()
     {
         // Arrange
-        var userWithEmailAddress = Fixture.Create<UserRepresentation>();
-        var userWitNullEmailAddress = Fixture.Build<UserRepresentation>()
+        var userWithEmailAddressAndUsername = Fixture.Create<UserRepresentation>();
+        var userWitNullEmailAddressAndNullUsername = Fixture.Build<UserRepresentation>()
             .With(f => f.Email, (string)null)
+            .With(f => f.Username, (string)null)
             .Create();
-        var userWitEmptyEmailAddress = Fixture.Build<UserRepresentation>()
+        var userWitEmptyEmailAddressAndEmptyUsername = Fixture.Build<UserRepresentation>()
             .With(f => f.Email, string.Empty)
+            .With(f => f.Username, string.Empty)
             .Create();
-        var userWitWhiteSpaceEmailAddress = Fixture.Build<UserRepresentation>()
+        var userWitWhiteSpaceEmailAddressAndWhitespaceUsername = Fixture.Build<UserRepresentation>()
             .With(f => f.Email, " ")
+            .With(f => f.Username, " ")
             .Create();
 
         KeycloakClientMock.Setup(m => m.UsersAll3Async(
@@ -49,10 +52,10 @@ public sealed class GetEmailAddressesMapAsync : Infrastructure
             It.IsAny<CancellationToken>())
         ).ReturnsAsync(new[]
         {
-            userWithEmailAddress,
-            userWitNullEmailAddress,
-            userWitEmptyEmailAddress,
-            userWitWhiteSpaceEmailAddress,
+            userWithEmailAddressAndUsername,
+            userWitNullEmailAddressAndNullUsername,
+            userWitEmptyEmailAddressAndEmptyUsername,
+            userWitWhiteSpaceEmailAddressAndWhitespaceUsername,
         });
         
         // Act
@@ -61,8 +64,9 @@ public sealed class GetEmailAddressesMapAsync : Infrastructure
         // Assert
         emailAddressesMap.Should().NotBeEmpty()
             .And.HaveCount(1)
-            .And.ContainSingle(i => i.Email == userWithEmailAddress.Email
-                                    && i.UserId == userWithEmailAddress.Id);
+            .And.ContainSingle(i => i.Email == userWithEmailAddressAndUsername.Email
+                                    && i.UserId == userWithEmailAddressAndUsername.Id
+                                    && i.Username == userWithEmailAddressAndUsername.Username);
         
         KeycloakClientMock.Verify(m
                 => m.UsersAll3Async(
@@ -86,5 +90,5 @@ public sealed class GetEmailAddressesMapAsync : Infrastructure
     }
 
     [DebuggerStepThrough]
-    private Task<IReadOnlySet<(string Email, string UserId)>> CallAsync() => Keycloak.GetEmailAddressesMapAsync(enabled);
+    private Task<IReadOnlySet<(string? Email, string? Username, string UserId)>> CallAsync() => Keycloak.GetUsersMapAsync(enabled);
 }
