@@ -1,6 +1,6 @@
 ﻿using AutoFixture;
 using Microsoft.Extensions.Options;
-using Moq;
+using NSubstitute;
 
 namespace VisualWorld.Keycloak.Tests;
 
@@ -10,13 +10,12 @@ public static class TestHelper
         where T : class
     {
         var options = fixture.Create<T>();
-        
-        var optionsSnapshotMock = new Mock<IOptionsSnapshot<T>>();
-        optionsSnapshotMock.SetupGet(m => m.Value)
-            .Returns(options);
-        
-        fixture.Inject(optionsSnapshotMock.Object);
 
-        return (optionsSnapshotMock.Object, options);
+        var optionsSnapshotSubstitute = Substitute.For<IOptionsSnapshot<T>>();
+        optionsSnapshotSubstitute.Value.Returns(options);
+
+        fixture.Inject(optionsSnapshotSubstitute);
+
+        return (optionsSnapshotSubstitute, options);
     }
 }

@@ -8,7 +8,7 @@ namespace VisualWorld.Keycloak.Tests.MapperTests;
 public sealed class ToKeycloakUser
 {
     private readonly IFixture fixture;
-    
+
     private UserRepresentation userRepresentation;
 
     public ToKeycloakUser()
@@ -17,24 +17,24 @@ public sealed class ToKeycloakUser
 
         userRepresentation = fixture.Create<UserRepresentation>();
     }
-    
+
     [Fact]
     public void ThrowsArgumentNullExceptionIfUserRepresentationIsNull()
     {
         // Arrange
         userRepresentation = null;
-        
+
         // Act, Assert
         var exception = Assert.Throws<ArgumentNullException>(() => Call());
         exception.ParamName.Should().Be("userRepresentation");
     }
-    
+
     [Fact]
     public void MapsToKeycloakUser()
     {
         // Act
         var mapped = Call();
-        
+
         // Assert
         mapped.Email.Should().Be(userRepresentation.Email);
         mapped.Enabled.Should().Be(userRepresentation.Enabled ?? false);
@@ -47,5 +47,8 @@ public sealed class ToKeycloakUser
     }
 
     [DebuggerStepThrough]
-    private KeycloakUser Call() => userRepresentation.ToKeycloakUser();
+    private KeycloakUser Call()
+    {
+        return userRepresentation.ToKeycloakUser();
+    }
 }

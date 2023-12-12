@@ -6,17 +6,15 @@ using Xunit;
 
 namespace VisualWorld.Keycloak.Tests.KeycloakTests;
 
-public sealed class SendVerifyEmailAsync : Infrastructure
+public sealed class SetPasswordAsync : Infrastructure
 {
-    private readonly string clientId;
-    private readonly string redirectUri;
+    private string password;
     private string userId;
 
-    public SendVerifyEmailAsync()
+    public SetPasswordAsync()
     {
         userId = Fixture.Create<string>();
-        clientId = Fixture.Create<string>();
-        redirectUri = Fixture.Create<string>();
+        password = Fixture.Create<string>();
     }
 
     [Theory]
@@ -35,6 +33,22 @@ public sealed class SendVerifyEmailAsync : Infrastructure
         KeycloakClientSubstitute.ReceivedCalls().Should().BeEmpty();
     }
 
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData(" ")]
+    public async Task ThrowsArgumentExceptionIfPasswordIs(string password)
+    {
+        // Arrange
+        this.password = password;
+
+        // Act, Assert
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => CallAsync());
+        exception.ParamName.Should().Be("password");
+
+        KeycloakClientSubstitute.ReceivedCalls().Should().BeEmpty();
+    }
+
     [Fact]
     public async Task CallsTheKeycloakClient()
     {
@@ -43,11 +57,10 @@ public sealed class SendVerifyEmailAsync : Infrastructure
 
         // Assert
         KeycloakClientSubstitute.Received(1)
-            .SendVerifyEmailAsync(
+            .ResetPasswordAsync(
+                Arg.Is<CredentialRepresentation>(cr => cr.Value == password && cr.Temporary == true),
                 KeycloakOptions.Realm,
                 userId,
-                clientId, // client_id
-                redirectUri, // redirect_uri
                 Arg.Any<CancellationToken>()
             );
     }
@@ -55,6 +68,6 @@ public sealed class SendVerifyEmailAsync : Infrastructure
     [DebuggerStepThrough]
     private Task CallAsync()
     {
-        return Keycloak.SendVerifyEmailAsync(userId, clientId, redirectUri);
+        return Keycloak.SetPasswordAsync(userId, password);
     }
 }

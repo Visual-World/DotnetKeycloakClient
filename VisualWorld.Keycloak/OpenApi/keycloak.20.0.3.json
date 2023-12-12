@@ -17,7 +17,7 @@
             "description": "success",
             "content": {
               "application/json": {
-               "schema": {
+                "schema": {
                   "$ref": "#/components/schemas/ServerInfoRepresentation"
                 }
               }
@@ -103,7 +103,7 @@
           },
           "202": {
             "description": "success"
-         },
+          },
           "204": {
             "description": "success"
           }
@@ -224,7 +224,7 @@
               "type": "array",
               "items": {
                 "type": "string"
-             }
+              }
             },
             "style": "form"
           },
@@ -451,7 +451,7 @@
               }
             }
           }
-       }
+        }
       },
       "parameters": [
         {
@@ -1697,7 +1697,7 @@
           "schema": {
             "type": "string"
           },
-         "style": "simple"
+          "style": "simple"
         }
       ]
     },
@@ -2335,7 +2335,7 @@
             }
           }
         }
-     },
+      },
       "post": {
         "tags": [
           "Scope Mappings"
@@ -2345,7 +2345,7 @@
           "content": {
             "application/json": {
               "schema": {
-               "type": "array",
+                "type": "array",
                 "items": {
                   "$ref": "#/components/schemas/RoleRepresentation"
                 }
@@ -3169,7 +3169,7 @@
           "required": true
         },
         "responses": {
-         "200": {
+          "200": {
             "description": "success"
           },
           "201": {
@@ -3348,7 +3348,7 @@
         "summary": "Generate a new certificate with new key pair",
         "responses": {
           "200": {
-           "description": "success",
+            "description": "success",
             "content": {
               "application/json": {
                 "schema": {
@@ -4217,7 +4217,7 @@
       ]
     },
     "/{realm}/clients/{id}/management/permissions": {
-     "get": {
+      "get": {
         "tags": [
           "Clients"
         ],
@@ -4943,7 +4943,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                 "items": {
+                  "items": {
                     "type": "object",
                     "additionalProperties": true
                   }
@@ -5125,7 +5125,7 @@
                     "type": "object",
                     "additionalProperties": true
                   }
-               }
+                }
               }
             }
           }
@@ -5694,7 +5694,7 @@
           "schema": {
             "type": "string"
           },
-         "style": "simple"
+          "style": "simple"
         },
         {
           "in": "path",
@@ -5763,7 +5763,7 @@
         },
         {
           "in": "path",
-         "name": "client",
+          "name": "client",
           "required": true,
           "schema": {
             "type": "string"
@@ -6101,7 +6101,7 @@
           "Clients"
         ],
         "summary": "Get application session count   Returns a number of user sessions associated with this client   {      \"count\": number  }",
-       "responses": {
+        "responses": {
           "200": {
             "description": "success",
             "content": {
@@ -6215,7 +6215,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                 "items": {
+                  "items": {
                     "type": "object",
                     "additionalProperties": true
                   }
@@ -6517,7 +6517,7 @@
       ]
     },
     "/{realm}/default-default-client-scopes": {
-     "get": {
+      "get": {
         "tags": [
           "Realms Admin"
         ],
@@ -7245,7 +7245,7 @@
             }
           },
           "required": true
-       },
+        },
         "responses": {
           "200": {
             "description": "success"
@@ -7289,7 +7289,7 @@
           "schema": {
             "type": "string"
           },
-         "style": "simple"
+          "style": "simple"
         },
         {
           "in": "path",
@@ -7362,7 +7362,7 @@
         ],
         "summary": "Return object stating whether client Authorization permissions have been initialized or not and a reference",
         "responses": {
-         "200": {
+          "200": {
             "description": "success",
             "content": {
               "application/json": {
@@ -7504,7 +7504,7 @@
       "get": {
         "tags": [
           "Role Mapper"
-       ],
+        ],
         "summary": "Get role mappings",
         "responses": {
           "200": {
@@ -7561,7 +7561,7 @@
                 }
               }
             }
-         }
+          }
         }
       },
       "post": {
@@ -8397,7 +8397,7 @@
           },
           "202": {
             "description": "success"
-         },
+          },
           "204": {
             "description": "success"
           }
@@ -8654,7 +8654,7 @@
         "responses": {
           "200": {
             "description": "success",
-           "content": {
+            "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
@@ -9114,7 +9114,7 @@
               }
             }
           }
-       }
+        }
       },
       "put": {
         "tags": [
@@ -9230,7 +9230,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                 "items": {
+                  "items": {
                     "type": "object",
                     "additionalProperties": true
                   }
@@ -9790,7 +9790,7 @@
           "schema": {
             "type": "string"
           },
-         "style": "simple"
+          "style": "simple"
         },
         {
           "in": "path",
@@ -10167,7 +10167,7 @@
             },
             "style": "form"
           },
-         {
+          {
             "in": "query",
             "name": "firstName",
             "description": "A String contained in firstName, or the complete firstName, if param \"exact\" is true",
@@ -10227,7 +10227,7 @@
             "name": "search",
             "description": "A String contained in username, first or last name, or email",
             "schema": {
-             "type": "string"
+              "type": "string"
             },
             "style": "form"
           },
@@ -10607,7 +10607,7 @@
         }
       ]
     },
-   "/{realm}/users/{id}/configured-user-storage-credential-types": {
+    "/{realm}/users/{id}/configured-user-storage-credential-types": {
       "get": {
         "tags": [
           "Users"
@@ -10766,8 +10766,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "additionalProperties": true
+                    "$ref": "#/components/schemas/CredentialRepresentation"
                   }
                 }
               }
@@ -11305,7 +11304,7 @@
           },
           "style": "simple"
         }
-     ]
+      ]
     },
     "/{realm}/users/{id}/groups": {
       "get": {
@@ -11355,7 +11354,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                 "items": {
+                  "items": {
                     "type": "object",
                     "additionalProperties": true
                   }
@@ -11421,7 +11420,7 @@
         {
           "in": "path",
           "name": "realm",
-         "description": "realm name (not id!)",
+          "description": "realm name (not id!)",
           "required": true,
           "schema": {
             "type": "string"
@@ -12043,7 +12042,7 @@
           },
           "202": {
             "description": "success"
-         },
+          },
           "204": {
             "description": "success"
           }
@@ -12107,7 +12106,7 @@
     },
     "/{realm}/users/{id}/role-mappings/realm/available": {
       "get": {
-       "tags": [
+        "tags": [
           "Role Mapper"
         ],
         "summary": "Get realm-level roles that can be mapped",
@@ -13016,7 +13015,7 @@
           },
           "containerName": {
             "type": "string"
-         },
+          },
           "containerType": {
             "type": "string"
           },
@@ -13807,7 +13806,7 @@
           "name": {
             "type": "string"
           },
-         "owner": {
+          "owner": {
             "type": "string"
           },
           "policies": {
@@ -13982,7 +13981,7 @@
             "type": "object",
             "additionalProperties": true
           },
-         "authenticationFlows": {
+          "authenticationFlows": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/AuthenticationFlowRepresentation"
@@ -13990,7 +13989,7 @@
           },
           "authenticatorConfig": {
             "type": "array",
-           "items": {
+            "items": {
               "$ref": "#/components/schemas/AuthenticatorConfigRepresentation"
             }
           },
@@ -14014,7 +14013,7 @@
           "clientOfflineSessionMaxLifespan": {
             "type": "integer",
             "format": "int32"
-         },
+          },
           "clientPolicies": {
             "$ref": "#/components/schemas/JsonNode"
           },
@@ -14067,7 +14066,7 @@
             "type": "array",
             "items": {
               "type": "string"
-           }
+            }
           },
           "defaultRole": {
             "$ref": "#/components/schemas/RoleRepresentation"
@@ -14157,7 +14156,7 @@
           },
           "loginTheme": {
             "type": "string"
-         },
+          },
           "loginWithEmailAllowed": {
             "type": "boolean"
           },
@@ -14482,7 +14481,7 @@
             "items": {
               "$ref": "#/components/schemas/ScopeRepresentation"
             }
-         },
+          },
           "type": {
             "type": "string"
           },

@@ -6,7 +6,8 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class Registrations
 {
-    public static IServiceCollection AddKeycloak(this IServiceCollection services, Action<KeycloakOptions>? configure = null)
+    public static IServiceCollection AddKeycloak(this IServiceCollection services,
+        Action<KeycloakOptions>? configure = null)
     {
         var keycloakOptionsBuilder = services.AddOptions<KeycloakOptions>();
         if (configure is not null)
@@ -17,12 +18,12 @@ public static class Registrations
         services.AddAccessTokenManagement((sp, options) =>
         {
             var keycloakOptions = sp.GetRequiredService<IOptions<KeycloakOptions>>().Value;
-            
+
             options.Client.Clients.Add("KeycloakClient", new ClientCredentialsTokenRequest
             {
                 ClientId = keycloakOptions.ClientId,
                 ClientSecret = keycloakOptions.ClientSecret,
-                Address = keycloakOptions.TokenUrl,
+                Address = keycloakOptions.TokenUrl
             });
         });
         services.AddKeycloakApiClient().AddClientAccessTokenHandler();
@@ -31,7 +32,8 @@ public static class Registrations
     }
 
     private static IHttpClientBuilder AddKeycloakApiClient(this IServiceCollection services)
-        => services
+    {
+        return services
             .AddScoped<IKeycloakClient, KeycloakClient>()
             .AddHttpClient<IKeycloakClient, KeycloakClient>((sp, httpClientBuilder) =>
             {
@@ -39,4 +41,5 @@ public static class Registrations
 
                 httpClientBuilder.BaseAddress = new Uri(keycloakOptions.ApiUrl);
             });
+    }
 }

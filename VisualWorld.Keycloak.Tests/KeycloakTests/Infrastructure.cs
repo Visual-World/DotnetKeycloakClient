@@ -1,25 +1,22 @@
 ﻿using AutoFixture;
-using AutoFixture.AutoMoq;
-using Moq;
+using AutoFixture.AutoNSubstitute;
 
 namespace VisualWorld.Keycloak.Tests.KeycloakTests;
 
 public abstract class Infrastructure
 {
-    protected readonly IFixture Fixture;
-
-    protected readonly Mock<IKeycloakClient> KeycloakClientMock = new ();
-
-    protected readonly KeycloakOptions KeycloakOptions;
+    protected readonly IFixture Fixture = new Fixture().Customize(new AutoNSubstituteCustomization());
 
     protected readonly Keycloak Keycloak;
 
+    protected readonly IKeycloakClient KeycloakClientSubstitute;
+
+    protected readonly KeycloakOptions KeycloakOptions;
+
     protected Infrastructure()
     {
-        Fixture = new Fixture().Customize(new AutoMoqCustomization());
-        
-        Fixture.Inject(KeycloakClientMock.Object);
-        
+        KeycloakClientSubstitute = Fixture.Freeze<IKeycloakClient>();
+
         var (_, options) = Fixture.CreateOptionsSnapshotMock<KeycloakOptions>();
         KeycloakOptions = options;
 

@@ -1,14 +1,14 @@
 ﻿using System.Diagnostics;
 using AutoFixture;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
 using Xunit;
 
 namespace VisualWorld.Keycloak.Tests.KeycloakTests;
 
 public sealed class GetUsersMapAsync : Infrastructure
 {
-    private bool? enabled;
+    private readonly bool? enabled;
 
     public GetUsersMapAsync()
     {
@@ -33,61 +33,63 @@ public sealed class GetUsersMapAsync : Infrastructure
             .With(f => f.Username, " ")
             .Create();
 
-        KeycloakClientMock.Setup(m => m.UsersAll3Async(
-            KeycloakOptions.Realm,
-            true, // briefRepresentation
-            null, // email
-            null, // emailVerified
-            enabled, // enabled
-            null, // exact
-            null, // first
-            null, // firstName
-            null, //idpAlias
-            null, // idpUserId
-            null, // lastName
-            null, // max
-            null, // q
-            null, // search
-            null, // username
-            It.IsAny<CancellationToken>())
-        ).ReturnsAsync(new[]
-        {
-            userWithEmailAddressAndUsername,
-            userWitNullEmailAddressAndNullUsername,
-            userWitEmptyEmailAddressAndEmptyUsername,
-            userWitWhiteSpaceEmailAddressAndWhitespaceUsername,
-        });
-        
+        KeycloakClientSubstitute.UsersAll3Async(
+                KeycloakOptions.Realm,
+                true, // briefRepresentation
+                null, // email
+                null, // emailVerified
+                enabled, // enabled
+                null, // exact
+                null, // first
+                null, // firstName
+                null, //idpAlias
+                null, // idpUserId
+                null, // lastName
+                null, // max
+                null, // q
+                null, // search
+                null, // username
+                Arg.Any<CancellationToken>())
+            .Returns(new[]
+            {
+                userWithEmailAddressAndUsername,
+                userWitNullEmailAddressAndNullUsername,
+                userWitEmptyEmailAddressAndEmptyUsername,
+                userWitWhiteSpaceEmailAddressAndWhitespaceUsername
+            });
+
         // Act
         var emailAddressesMap = await CallAsync();
-        
+
         // Assert
         emailAddressesMap.Should().NotBeEmpty()
             .And.HaveCount(1)
             .And.ContainSingle(i => i.UserId == userWithEmailAddressAndUsername.Id
                                     && i.Username == userWithEmailAddressAndUsername.Username);
-        
-        KeycloakClientMock.Verify(m
-                => m.UsersAll3Async(
-                    KeycloakOptions.Realm,
-                    true, // briefRepresentation
-                    null, // email
-                    null, // emailVerified
-                    enabled, // enabled
-                    null, // exact
-                    null, // first
-                    null, // firstName
-                    null, //idpAlias
-                    null, // idpUserId
-                    null, // lastName
-                    null, // max
-                    null, // q
-                    null, // search
-                    null, // username
-                    It.IsAny<CancellationToken>()),
-            Times.Once);
+
+        KeycloakClientSubstitute.Received(1)
+            .UsersAll3Async(
+                KeycloakOptions.Realm,
+                true, // briefRepresentation
+                null, // email
+                null, // emailVerified
+                enabled, // enabled
+                null, // exact
+                null, // first
+                null, // firstName
+                null, //idpAlias
+                null, // idpUserId
+                null, // lastName
+                null, // max
+                null, // q
+                null, // search
+                null, // username
+                Arg.Any<CancellationToken>());
     }
 
     [DebuggerStepThrough]
-    private Task<IReadOnlySet<(string Username, string UserId)>> CallAsync() => Keycloak.GetUsersMapAsync(enabled);
+    private Task<IReadOnlySet<(string Username, string UserId)>> CallAsync()
+    {
+        return Keycloak.GetUsersMapAsync(enabled);
+    }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using AutoFixture;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
 using Xunit;
 
 namespace VisualWorld.Keycloak.Tests.KeycloakTests;
@@ -23,12 +23,12 @@ public sealed class DeleteUserAsync : Infrastructure
     {
         // Arrange
         this.userId = userId;
-        
+
         // Act, Assert
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => CallAsync());
         exception.ParamName.Should().Be("userId");
-        
-        KeycloakClientMock.Invocations.Should().BeEmpty();
+
+        KeycloakClientSubstitute.ReceivedCalls().Should().BeEmpty();
     }
 
     [Fact]
@@ -36,17 +36,19 @@ public sealed class DeleteUserAsync : Infrastructure
     {
         // Act
         await CallAsync();
-        
+
         // Assert
-        KeycloakClientMock.Verify(m
-                => m.UsersDELETE3Async(
-                    KeycloakOptions.Realm,
-                    userId,
-                    It.IsAny<CancellationToken>()
-                ),
-            Times.Once);
+        KeycloakClientSubstitute.Received(1)
+            .UsersDELETE3Async(
+                KeycloakOptions.Realm,
+                userId,
+                Arg.Any<CancellationToken>()
+            );
     }
-    
+
     [DebuggerStepThrough]
-    private Task CallAsync() => Keycloak.DeleteUserAsync(userId);
+    private Task CallAsync()
+    {
+        return Keycloak.DeleteUserAsync(userId);
+    }
 }

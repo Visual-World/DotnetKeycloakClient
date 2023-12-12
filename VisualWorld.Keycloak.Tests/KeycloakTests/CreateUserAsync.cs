@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using AutoFixture;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
 using Xunit;
 
 namespace VisualWorld.Keycloak.Tests.KeycloakTests;
@@ -20,12 +20,12 @@ public sealed class CreateUserAsync : Infrastructure
     {
         // Arrange
         createKeycloakUserRequest = null;
-        
+
         // Act, Assert
         var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => CallAsync());
         exception.ParamName.Should().Be("createKeycloakUserRequest");
-        
-        KeycloakClientMock.Invocations.Should().BeEmpty();
+
+        KeycloakClientSubstitute.ReceivedCalls().Should().BeEmpty();
     }
 
     [Fact]
@@ -33,21 +33,23 @@ public sealed class CreateUserAsync : Infrastructure
     {
         // Act
         await CallAsync();
-        
+
         // Assert
-        KeycloakClientMock.Verify(m
-                => m.UsersPOSTAsync(
-                    It.Is<UserRepresentation>(ur
-                        => ur.Username == createKeycloakUserRequest.Username
-                           && ur.Email == createKeycloakUserRequest.Email
-                           && ur.Enabled == createKeycloakUserRequest.Enabled
-                           && ur.RequiredActions == createKeycloakUserRequest.RequiredActions),
-                    KeycloakOptions.Realm,
-                    It.IsAny<CancellationToken>()
-                ),
-            Times.Once);
+        KeycloakClientSubstitute.Received(1)
+            .UsersPOSTAsync(
+                Arg.Is<UserRepresentation>(ur
+                    => ur.Username == createKeycloakUserRequest.Username
+                       && ur.Email == createKeycloakUserRequest.Email
+                       && ur.Enabled == createKeycloakUserRequest.Enabled
+                       && ur.RequiredActions == createKeycloakUserRequest.RequiredActions),
+                KeycloakOptions.Realm,
+                Arg.Any<CancellationToken>()
+            );
     }
-    
+
     [DebuggerStepThrough]
-    private Task CallAsync() => Keycloak.CreateUserAsync(createKeycloakUserRequest);
+    private Task CallAsync()
+    {
+        return Keycloak.CreateUserAsync(createKeycloakUserRequest);
+    }
 }

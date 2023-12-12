@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using AutoFixture;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
 using Xunit;
 
 namespace VisualWorld.Keycloak.Tests.KeycloakTests;
@@ -23,19 +23,19 @@ public sealed class GetUserByUsernameAsync : Infrastructure
     {
         // Arrange
         this.username = username;
-        
+
         // Act, Assert
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => CallAsync());
         exception.ParamName.Should().Be("username");
-        
-        KeycloakClientMock.Invocations.Should().BeEmpty();
+
+        KeycloakClientSubstitute.ReceivedCalls().Should().BeEmpty();
     }
 
     [Fact]
     public async Task CallsTheKeycloakClientAndReturnsNull()
     {
         // Arrange
-        KeycloakClientMock.Setup(m => m.UsersAll3Async(
+        KeycloakClientSubstitute.UsersAll3Async(
                 KeycloakOptions.Realm,
                 null, // briefRepresentation
                 null,
@@ -51,90 +51,88 @@ public sealed class GetUserByUsernameAsync : Infrastructure
                 null, // q
                 null, // search
                 username,
-                It.IsAny<CancellationToken>()
-            )
-        ).ReturnsAsync(Array.Empty<UserRepresentation>());
-        
+                Arg.Any<CancellationToken>())
+            .Returns(Array.Empty<UserRepresentation>());
+
         // Act
         var keycloakUser = await CallAsync();
-        
+
         // Assert
         keycloakUser.Should().BeNull();
-        
-        KeycloakClientMock.Verify(m
-                => m.UsersAll3Async(
-                    KeycloakOptions.Realm,
-                    null, // briefRepresentation
-                    null,
-                    null, // emailVerified
-                    true, // enabled
-                    null, // exact
-                    null, // first
-                    null, // firstName
-                    null, //idpAlias
-                    null, // idpUserId
-                    null, // lastName
-                    1, // max
-                    null, // q
-                    null, // search
-                    username,
-                    It.IsAny<CancellationToken>()
-                ),
-            Times.Once);
+
+        KeycloakClientSubstitute.Received(1)
+            .UsersAll3Async(
+                KeycloakOptions.Realm,
+                null, // briefRepresentation
+                null,
+                null, // emailVerified
+                true, // enabled
+                null, // exact
+                null, // first
+                null, // firstName
+                null, //idpAlias
+                null, // idpUserId
+                null, // lastName
+                1, // max
+                null, // q
+                null, // search
+                username,
+                Arg.Any<CancellationToken>());
     }
-    
+
     [Fact]
     public async Task CallsTheKeycloakClientAndReturnsTheKeycloakUser()
     {
         // Arrange
-        KeycloakClientMock.Setup(m => m.UsersAll3Async(
-            KeycloakOptions.Realm,
-            null, // briefRepresentation
-            null,
-            null, // emailVerified
-            true, // enabled
-            null, // exact
-            null, // first
-            null, // firstName
-            null, //idpAlias
-            null, // idpUserId
-            null, // lastName
-            1, // max
-            null, // q
-            null, // search
-            username,
-            It.IsAny<CancellationToken>()
-            )
-        ).ReturnsAsync(Fixture.CreateMany<UserRepresentation>(1).ToList);
-        
+        KeycloakClientSubstitute.UsersAll3Async(
+                KeycloakOptions.Realm,
+                null, // briefRepresentation
+                null,
+                null, // emailVerified
+                true, // enabled
+                null, // exact
+                null, // first
+                null, // firstName
+                null, //idpAlias
+                null, // idpUserId
+                null, // lastName
+                1, // max
+                null, // q
+                null, // search
+                username,
+                Arg.Any<CancellationToken>())
+            .Returns(Fixture.CreateMany<UserRepresentation>(1).ToList());
+
         // Act
         var keycloakUser = await CallAsync();
-        
+
         // Assert
         keycloakUser.Should().NotBeNull();
-        
-        KeycloakClientMock.Verify(m
-                => m.UsersAll3Async(
-                    KeycloakOptions.Realm,
-                    null, // briefRepresentation
-                    null,
-                    null, // emailVerified
-                    true, // enabled
-                    null, // exact
-                    null, // first
-                    null, // firstName
-                    null, //idpAlias
-                    null, // idpUserId
-                    null, // lastName
-                    1, // max
-                    null, // q
-                    null, // search
-                    username,
-                    It.IsAny<CancellationToken>()
-                ),
-            Times.Once);
+
+        KeycloakClientSubstitute.Received(1)
+            .UsersAll3Async(
+                KeycloakOptions.Realm,
+                null, // briefRepresentation
+                null,
+                null, // emailVerified
+                true, // enabled
+                null, // exact
+                null, // first
+                null, // firstName
+                null, //idpAlias
+                null, // idpUserId
+                null, // lastName
+                1, // max
+                null, // q
+                null, // search
+                username,
+                Arg.Any<CancellationToken>()
+            );
     }
 
     [DebuggerStepThrough]
-    private Task<KeycloakUser?> CallAsync() => Keycloak.GetUserByUsernameAsync(username);
+    private Task<KeycloakUser?> CallAsync()
+    {
+        return Keycloak.GetUserByUsernameAsync(username);
+    }
 }

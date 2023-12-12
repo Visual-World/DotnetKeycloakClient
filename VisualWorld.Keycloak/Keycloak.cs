@@ -5,7 +5,7 @@ namespace VisualWorld.Keycloak;
 public class Keycloak : IKeycloak
 {
     private readonly IKeycloakClient keycloakClient;
-    
+
     private readonly IOptionsSnapshot<KeycloakOptions> keycloakOptions;
 
     public Keycloak(
@@ -15,9 +15,9 @@ public class Keycloak : IKeycloak
         this.keycloakClient = keycloakClient ?? throw new ArgumentNullException(nameof(keycloakClient));
         this.keycloakOptions = keycloakOptions ?? throw new ArgumentNullException(nameof(keycloakOptions));
     }
-    
+
     public async Task SendVerifyEmailAsync(
-        string userId, 
+        string userId,
         string? clientId = null,
         string? redirectUri = null,
         CancellationToken cancellationToken = default
@@ -33,7 +33,7 @@ public class Keycloak : IKeycloak
             userId,
             clientId,
             redirectUri,
-            cancellationToken: cancellationToken);
+            cancellationToken);
     }
 
     public async Task<KeycloakUser?> GetUserByUsernameAsync(
@@ -44,7 +44,7 @@ public class Keycloak : IKeycloak
         {
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(username));
         }
-        
+
         var users = await keycloakClient.UsersAll3Async(
             keycloakOptions.Value.Realm,
             enabled: true,
@@ -62,7 +62,7 @@ public class Keycloak : IKeycloak
         {
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(userId));
         }
-        
+
         var user = await keycloakClient.UsersGET2Async(
             keycloakOptions.Value.Realm,
             userId,
@@ -79,14 +79,14 @@ public class Keycloak : IKeycloak
         {
             throw new ArgumentNullException(nameof(createKeycloakUserRequest));
         }
-        
+
         await keycloakClient.UsersPOSTAsync(
             new UserRepresentation
             {
-                Username = createKeycloakUserRequest.Username, 
-                Email = createKeycloakUserRequest.Email, 
+                Username = createKeycloakUserRequest.Username,
+                Email = createKeycloakUserRequest.Email,
                 Enabled = createKeycloakUserRequest.Enabled,
-                RequiredActions = createKeycloakUserRequest.RequiredActions,
+                RequiredActions = createKeycloakUserRequest.RequiredActions
             },
             keycloakOptions.Value.Realm,
             cancellationToken);
@@ -98,7 +98,7 @@ public class Keycloak : IKeycloak
     {
         var users = await keycloakClient.UsersAll3Async(
             keycloakOptions.Value.Realm,
-            briefRepresentation: true,
+            true,
             enabled: enabled,
             cancellationToken: cancellationToken);
 
@@ -113,7 +113,29 @@ public class Keycloak : IKeycloak
         {
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(userId));
         }
-        
+
         await keycloakClient.UsersDELETE3Async(keycloakOptions.Value.Realm, userId, cancellationToken);
+    }
+
+    public async Task SetPasswordAsync(string userId, string password, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            throw new ArgumentException("Value cannot be null or whitespace.", nameof(userId));
+        }
+
+        if (string.IsNullOrWhiteSpace(password))
+        {
+            throw new ArgumentException("Value cannot be null or whitespace.", nameof(password));
+        }
+        
+        await keycloakClient.ResetPasswordAsync(new CredentialRepresentation
+            {
+                Temporary = true,
+                Value = password
+            },
+            keycloakOptions.Value.Realm,
+            userId,
+            cancellationToken);
     }
 }

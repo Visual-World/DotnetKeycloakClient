@@ -9,27 +9,25 @@
         <Description>Part of the VisualWorld.Keycloak SDK</Description>
         <Copyright>Visual World GmbH</Copyright>
     </PropertyGroup>
-    
+
     <ItemGroup>
-        <PackageReference Include="IdentityModel.AspNetCore" Version="4.3.0" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-        <PackageReference Include="NSwag.ApiDescription.Client" Version="13.19.0">
+        <PackageReference Include="IdentityModel.AspNetCore" Version="4.3.0"/>
+        <PackageReference Include="NSwag.ApiDescription.Client" Version="13.20.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
 
-<!--    Das openApi file von https://github.com/ccouzens/keycloak-openapi/blob/main/keycloak/20.0.3.json-->
-<!--    ist mal wieder totaler dreck und es lässt sich ohne anpassung kein kompilierbarer code generieren-->
+    <!--    Das openApi file von https://github.com/ccouzens/keycloak-openapi/blob/main/keycloak/20.0.3.json-->
+    <!--    ist mal wieder totaler dreck und es lässt sich ohne anpassung kein kompilierbarer code generieren-->
     <!-- disable auto code generation -->
-        <ItemGroup>
-            <OpenApiReference Include="./OpenApi/keycloak.20.0.3.json">
-                <Namespace>$(AssemblyName)</Namespace>
-                <Classname>{controller}KeycloakClient</Classname>
-                <Options>/AnyType:"object" /ArrayBaseType:"System.Collections.Generic.List" /ArrayInstanceType:"System.Collections.Generic.List" /ArrayType:"System.Collections.Generic.IReadOnlyList" /ChecksumCacheEnabled:false /ClassStyle:"Poco" /ClientClassAccessModifier:"public" /ContractsNamespace:"" /ContractsOutputFilePath:"" /DateTimeType:"System.DateTime" /DateType:"System.DateTime" /DictionaryBaseType:"System.Collections.Generic.Dictionary" /DictionaryInstanceType:"System.Collections.Generic.Dictionary" /DictionaryType:"System.Collections.Generic.IReadOnlyDictionary" /DisposeHttpClient:false /EnforceFlagEnums:false /ExceptionClass:"SwaggerException" /ExposeJsonSerializerSettings:false /GenerateBaseUrlProperty:false /GenerateClientClasses:true /GenerateClientInterfaces:true /GenerateContractsOutput:false /GenerateDataAnnotations:false /GenerateDefaultValues:true /GenerateDtoTypes:true /GenerateExceptionClasses:true /GenerateImmutableArrayProperties:false /GenerateImmutableDictionaryProperties:false /GenerateJsonMethods:true /GenerateNullableReferenceTypes:true /GenerateOptionalParameters:true /GenerateOptionalPropertiesAsNullable:true /GeneratePrepareRequestAndProcessResponseAsAsyncMethods:false /GenerateResponseClasses:true /GenerateSyncMethods:false /GenerateUpdateJsonSerializerSettingsMethod:true /HandleReferences:false /HttpClientType:"System.Net.Http.HttpClient" /InjectHttpClient:true /InlineNamedAny:false /InlineNamedArrays:false /InlineNamedDictionaries:false /InlineNamedTuples:true /JsonLibrary:"SystemTextJson" /OperationGenerationMode:"MultipleClientsFromOperationId" /ParameterArrayType:"System.Collections.Generic.IReadOnlyList" /ParameterDateFormat:"yyyy-MM-dd" /ParameterDateTimeFormat:"s" /ParameterDictionaryType:"System.Collections.Generic.IReadOnlyDictionary" /QueryNullValue:"" /RequiredPropertiesMustBeDefined:true /ResponseArrayType:"System.Collections.Generic.IReadOnlyList" /ResponseClass:"ExampleResponse" /ResponseDictionaryType:"System.Collections.Generic.IReadOnlyDictionary" /SerializeTypeInformation:true /TimeSpanType:"System.TimeSpan" /TimeType:"System.TimeSpan" /TypeAccessModifier:"public" /UseBaseUrl:false /UseHttpClientCreationMethod:false /UseHttpRequestMessageCreationMethod:false /UseRequestAndResponseSerializationSettings:false /WrapDtoExceptions:false /WrapResponses:false</Options>
-            </OpenApiReference>
-        </ItemGroup>
+    <ItemGroup>
+        <OpenApiReference Include="./OpenApi/keycloak.20.0.3.json">
+            <Namespace>$(AssemblyName)</Namespace>
+            <Classname>{controller}KeycloakClient</Classname>
+            <Options>/AnyType:"object" /ArrayBaseType:"System.Collections.Generic.List" /ArrayInstanceType:"System.Collections.Generic.List" /ArrayType:"System.Collections.Generic.IReadOnlyList" /ChecksumCacheEnabled:false /ClassStyle:"Poco" /ClientClassAccessModifier:"public" /ContractsNamespace:"" /ContractsOutputFilePath:"" /DateTimeType:"System.DateTime" /DateType:"System.DateTime" /DictionaryBaseType:"System.Collections.Generic.Dictionary" /DictionaryInstanceType:"System.Collections.Generic.Dictionary" /DictionaryType:"System.Collections.Generic.IReadOnlyDictionary" /DisposeHttpClient:false /EnforceFlagEnums:false /ExceptionClass:"SwaggerException" /ExposeJsonSerializerSettings:false /GenerateBaseUrlProperty:false /GenerateClientClasses:true /GenerateClientInterfaces:true /GenerateContractsOutput:false /GenerateDataAnnotations:false /GenerateDefaultValues:true /GenerateDtoTypes:true /GenerateExceptionClasses:true /GenerateImmutableArrayProperties:false /GenerateImmutableDictionaryProperties:false /GenerateJsonMethods:true /GenerateNullableReferenceTypes:true /GenerateOptionalParameters:true /GenerateOptionalPropertiesAsNullable:true /GeneratePrepareRequestAndProcessResponseAsAsyncMethods:false /GenerateResponseClasses:true /GenerateSyncMethods:false /GenerateUpdateJsonSerializerSettingsMethod:true /HandleReferences:false /HttpClientType:"System.Net.Http.HttpClient" /InjectHttpClient:true /InlineNamedAny:false /InlineNamedArrays:false /InlineNamedDictionaries:false /InlineNamedTuples:true /JsonLibrary:"SystemTextJson" /OperationGenerationMode:"MultipleClientsFromOperationId" /ParameterArrayType:"System.Collections.Generic.IReadOnlyList" /ParameterDateFormat:"yyyy-MM-dd" /ParameterDateTimeFormat:"s" /ParameterDictionaryType:"System.Collections.Generic.IReadOnlyDictionary" /QueryNullValue:"" /RequiredPropertiesMustBeDefined:true /ResponseArrayType:"System.Collections.Generic.IReadOnlyList" /ResponseClass:"ExampleResponse" /ResponseDictionaryType:"System.Collections.Generic.IReadOnlyDictionary" /SerializeTypeInformation:true /TimeSpanType:"System.TimeSpan" /TimeType:"System.TimeSpan" /TypeAccessModifier:"public" /UseBaseUrl:false /UseHttpClientCreationMethod:false /UseHttpRequestMessageCreationMethod:false /UseRequestAndResponseSerializationSettings:false /WrapDtoExceptions:false /WrapResponses:false
+            </Options>
+        </OpenApiReference>
+    </ItemGroup>
 
 </Project>

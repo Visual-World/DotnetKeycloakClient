@@ -1,8 +1,9 @@
 ﻿namespace VisualWorld.Keycloak;
 
 public interface IKeycloak
-{    Task SendVerifyEmailAsync(
-        string userId, 
+{
+    Task SendVerifyEmailAsync(
+        string userId,
         string? clientId = null,
         string? redirectUri = null,
         CancellationToken cancellationToken = default
@@ -11,7 +12,7 @@ public interface IKeycloak
     Task<KeycloakUser?> GetUserByUsernameAsync(
         string username,
         CancellationToken cancellationToken = default);
-    
+
     Task<KeycloakUser> GetUserByIdAsync(string userId,
         CancellationToken cancellationToken = default);
 
@@ -24,4 +25,6 @@ public interface IKeycloak
         CancellationToken cancellationToken = default);
 
     Task DeleteUserAsync(string userId, CancellationToken cancellationToken = default);
+
+    Task SetPasswordAsync(string userId, string password, CancellationToken cancellationToken = default);
 }

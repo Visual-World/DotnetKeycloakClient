@@ -1,8 +1,7 @@
 ﻿using System.Diagnostics;
 using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
 using Xunit;
 
 namespace VisualWorld.Keycloak.Tests.KeycloakTests;
@@ -24,40 +23,41 @@ public sealed class GetUserByIdAsync : Infrastructure
     {
         // Arrange
         this.userId = userId;
-        
+
         // Act, Assert
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => CallAsync());
         exception.ParamName.Should().Be("userId");
-        
-        KeycloakClientMock.Invocations.Should().BeEmpty();
+
+        KeycloakClientSubstitute.ReceivedCalls().Should().BeEmpty();
     }
 
     [Fact]
     public async Task CallsTheKeycloakClientAndReturnsTheKeycloakUser()
     {
         // Arrange
-        KeycloakClientMock.Setup(m => m.UsersGET2Async(
+        KeycloakClientSubstitute.UsersGET2Async(
                 KeycloakOptions.Realm,
                 userId,
-                It.IsAny<CancellationToken>()
-            )
-        ).ReturnsUsingFixture(Fixture);
-        
+                Arg.Any<CancellationToken>())
+            .Returns(Fixture.Create<UserRepresentation>());
+
         // Act
         var keycloakUser = await CallAsync();
-        
+
         // Assert
         keycloakUser.Should().NotBeNull();
-        
-        KeycloakClientMock.Verify(m
-                => m.UsersGET2Async(
-                    KeycloakOptions.Realm,
-                    userId,
-                    It.IsAny<CancellationToken>()
-                ),
-            Times.Once);
+
+        KeycloakClientSubstitute.Received(1)
+            .UsersGET2Async(
+                KeycloakOptions.Realm,
+                userId,
+                Arg.Any<CancellationToken>()
+            );
     }
 
     [DebuggerStepThrough]
-    private Task<KeycloakUser> CallAsync() => Keycloak.GetUserByIdAsync(userId);
+    private Task<KeycloakUser> CallAsync()
+    {
+        return Keycloak.GetUserByIdAsync(userId);
+    }
 }
