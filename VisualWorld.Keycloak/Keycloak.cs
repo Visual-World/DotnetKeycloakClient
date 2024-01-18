@@ -48,6 +48,7 @@ public class Keycloak : IKeycloak
         var users = await keycloakClient.UsersAll3Async(
             keycloakOptions.Value.Realm,
             enabled: true,
+            exact: true,
             max: 1,
             username: username,
             cancellationToken: cancellationToken);
@@ -98,7 +99,7 @@ public class Keycloak : IKeycloak
     {
         var users = await keycloakClient.UsersAll3Async(
             keycloakOptions.Value.Realm,
-            true,
+            briefRepresentation: true,
             enabled: enabled,
             cancellationToken: cancellationToken);
 
