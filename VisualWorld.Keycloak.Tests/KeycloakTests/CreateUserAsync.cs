@@ -35,7 +35,7 @@ public sealed class CreateUserAsync : Infrastructure
         await CallAsync();
 
         // Assert
-        KeycloakClientSubstitute.Received(1)
+        await KeycloakClientSubstitute.Received(1)
             .UsersPOSTAsync(
                 Arg.Is<UserRepresentation>(ur
                     => ur.Username == createKeycloakUserRequest.Username

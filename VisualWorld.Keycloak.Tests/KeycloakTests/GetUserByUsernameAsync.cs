@@ -9,10 +9,14 @@ namespace VisualWorld.Keycloak.Tests.KeycloakTests;
 public sealed class GetUserByUsernameAsync : Infrastructure
 {
     private string username;
+    private string firstName;
+    private string lastName;
 
     public GetUserByUsernameAsync()
     {
         username = Fixture.Create<string>();
+        firstName = Fixture.Create<string>();
+        lastName = Fixture.Create<string>();
     }
 
     [Theory]
@@ -41,7 +45,7 @@ public sealed class GetUserByUsernameAsync : Infrastructure
                 null,
                 null, // emailVerified
                 true, // enabled
-                null, // exact
+                true, // exact
                 null, // first
                 null, // firstName
                 null, //idpAlias
@@ -60,14 +64,14 @@ public sealed class GetUserByUsernameAsync : Infrastructure
         // Assert
         keycloakUser.Should().BeNull();
 
-        KeycloakClientSubstitute.Received(1)
+        await KeycloakClientSubstitute.Received(1)
             .UsersAll3Async(
                 KeycloakOptions.Realm,
                 null, // briefRepresentation
                 null,
                 null, // emailVerified
                 true, // enabled
-                null, // exact
+                true, // exact
                 null, // first
                 null, // firstName
                 null, //idpAlias
@@ -90,7 +94,7 @@ public sealed class GetUserByUsernameAsync : Infrastructure
                 null,
                 null, // emailVerified
                 true, // enabled
-                null, // exact
+                true, // exact
                 null, // first
                 null, // firstName
                 null, //idpAlias
@@ -109,14 +113,14 @@ public sealed class GetUserByUsernameAsync : Infrastructure
         // Assert
         keycloakUser.Should().NotBeNull();
 
-        KeycloakClientSubstitute.Received(1)
+        await KeycloakClientSubstitute.Received(1)
             .UsersAll3Async(
                 KeycloakOptions.Realm,
                 null, // briefRepresentation
                 null,
                 null, // emailVerified
                 true, // enabled
-                null, // exact
+                true, // exact
                 null, // first
                 null, // firstName
                 null, //idpAlias
