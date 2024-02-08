@@ -86,6 +86,8 @@ public class Keycloak : IKeycloak
             {
                 Username = createKeycloakUserRequest.Username,
                 Email = createKeycloakUserRequest.Email,
+                FirstName = createKeycloakUserRequest.FirstName,
+                LastName = createKeycloakUserRequest.LastName,
                 Enabled = createKeycloakUserRequest.Enabled,
                 RequiredActions = createKeycloakUserRequest.RequiredActions
             },

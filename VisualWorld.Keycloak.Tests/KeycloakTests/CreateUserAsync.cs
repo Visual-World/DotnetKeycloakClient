@@ -40,6 +40,8 @@ public sealed class CreateUserAsync : Infrastructure
                 Arg.Is<UserRepresentation>(ur
                     => ur.Username == createKeycloakUserRequest.Username
                        && ur.Email == createKeycloakUserRequest.Email
+                       && ur.FirstName == createKeycloakUserRequest.FirstName
+                       && ur.LastName == createKeycloakUserRequest.LastName
                        && ur.Enabled == createKeycloakUserRequest.Enabled
                        && ur.RequiredActions == createKeycloakUserRequest.RequiredActions),
                 KeycloakOptions.Realm,
