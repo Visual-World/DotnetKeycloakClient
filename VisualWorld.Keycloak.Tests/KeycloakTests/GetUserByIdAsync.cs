@@ -56,7 +56,7 @@ public sealed class GetUserByIdAsync : Infrastructure
     }
 
     [DebuggerStepThrough]
-    private Task<KeycloakUser> CallAsync()
+    private Task<KeycloakUserWithFederatedIdentities> CallAsync()
     {
         return Keycloak.GetUserByIdAsync(userId);
     }
