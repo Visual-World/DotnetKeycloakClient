@@ -45,7 +45,7 @@ public sealed class GetUsersMapAsync : Infrastructure
                 null, //idpAlias
                 null, // idpUserId
                 null, // lastName
-                null, // max
+                -1, // max
                 null, // q
                 null, // search
                 null, // username
@@ -80,7 +80,7 @@ public sealed class GetUsersMapAsync : Infrastructure
                 null, //idpAlias
                 null, // idpUserId
                 null, // lastName
-                null, // max
+                -1, // max
                 null, // q
                 null, // search
                 null, // username

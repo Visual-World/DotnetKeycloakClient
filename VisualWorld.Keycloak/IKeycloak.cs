@@ -13,7 +13,7 @@ public interface IKeycloak
         string username,
         CancellationToken cancellationToken = default);
 
-    Task<KeycloakUser> GetUserByIdAsync(string userId,
+    Task<KeycloakUserWithFederatedIdentities> GetUserByIdAsync(string userId,
         CancellationToken cancellationToken = default);
 
     Task CreateUserAsync(
@@ -27,4 +27,5 @@ public interface IKeycloak
     Task DeleteUserAsync(string userId, CancellationToken cancellationToken = default);
 
     Task SetPasswordAsync(string userId, string password, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<KeycloakUser>> GetUsersAsync(bool? enabled, CancellationToken cancellationToken = default);
 }

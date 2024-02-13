@@ -5,13 +5,13 @@ using Xunit;
 
 namespace VisualWorld.Keycloak.Tests.MapperTests;
 
-public sealed class ToKeycloakUser
+public sealed class ToKeycloakUserWithFederatedIdentities
 {
     private readonly IFixture fixture;
 
     private UserRepresentation userRepresentation;
 
-    public ToKeycloakUser()
+    public ToKeycloakUserWithFederatedIdentities()
     {
         fixture = new Fixture();
 
@@ -42,12 +42,13 @@ public sealed class ToKeycloakUser
         mapped.EmailVerified.Should().Be(userRepresentation.EmailVerified ?? false);
         mapped.FirstName.Should().Be(userRepresentation.FirstName);
         mapped.LastName.Should().Be(userRepresentation.LastName);
+        mapped.FederatedIdentities.Should().HaveCount(userRepresentation.FederatedIdentities.Count);
         mapped.RequiredActions.Should().BeEquivalentTo(userRepresentation.RequiredActions);
     }
 
     [DebuggerStepThrough]
-    private KeycloakUser Call()
+    private KeycloakUserWithFederatedIdentities Call()
     {
-        return userRepresentation.ToKeycloakUser();
+        return userRepresentation.ToKeycloakUserWithFederatedIdentities();
     }
 }

@@ -4,13 +4,35 @@ public static class Mapper
 {
     public static KeycloakUser ToKeycloakUser(this UserRepresentation userRepresentation)
     {
-        if (userRepresentation == null)
+        if (userRepresentation?.Id == null)
         {
             throw new ArgumentNullException(nameof(userRepresentation));
         }
 
-        var keycloakUser = new KeycloakUser(userRepresentation.Id)
+        var keycloakUser = new KeycloakUser
         {
+            Id = userRepresentation.Id,
+            Email = userRepresentation.Email,
+            Enabled = userRepresentation.Enabled ?? false,
+            Username = userRepresentation.Username,
+            EmailVerified = userRepresentation.EmailVerified ?? false,
+            FirstName = userRepresentation.FirstName,
+            LastName = userRepresentation.LastName,
+            RequiredActions = userRepresentation.RequiredActions ?? Array.Empty<string>()
+        };
+
+        return keycloakUser;
+    }
+    public static KeycloakUserWithFederatedIdentities ToKeycloakUserWithFederatedIdentities(this UserRepresentation userRepresentation)
+    {
+        if (userRepresentation?.Id == null)
+        {
+            throw new ArgumentNullException(nameof(userRepresentation));
+        }
+
+        var keycloakUser = new KeycloakUserWithFederatedIdentities
+        {
+            Id = userRepresentation.Id,
             Email = userRepresentation.Email,
             Enabled = userRepresentation.Enabled ?? false,
             Username = userRepresentation.Username,
@@ -20,7 +42,7 @@ public static class Mapper
             FederatedIdentities = userRepresentation.FederatedIdentities is not null
                 ? userRepresentation.FederatedIdentities
                     .Select(f => f.ToKeycloakFederatedIdentity())
-                    .ToList()
+                    .ToArray()
                 : Array.Empty<KeycloakFederatedIdentity>(),
             RequiredActions = userRepresentation.RequiredActions ?? Array.Empty<string>()
         };
@@ -36,8 +58,9 @@ public static class Mapper
             throw new ArgumentNullException(nameof(federatedIdentityRepresentation));
         }
 
-        return new KeycloakFederatedIdentity(federatedIdentityRepresentation.IdentityProvider)
+        return new KeycloakFederatedIdentity
         {
+            IdentityProvider = federatedIdentityRepresentation.IdentityProvider ?? string.Empty,
             Username = federatedIdentityRepresentation.UserName,
             UserId = federatedIdentityRepresentation.UserId
         };

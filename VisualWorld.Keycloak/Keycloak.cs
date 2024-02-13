@@ -56,7 +56,7 @@ public class Keycloak : IKeycloak
         return users.SingleOrDefault()?.ToKeycloakUser();
     }
 
-    public async Task<KeycloakUser> GetUserByIdAsync(string userId,
+    public async Task<KeycloakUserWithFederatedIdentities> GetUserByIdAsync(string userId,
         CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(userId))
@@ -69,7 +69,7 @@ public class Keycloak : IKeycloak
             userId,
             cancellationToken);
 
-        return user.ToKeycloakUser();
+        return user.ToKeycloakUserWithFederatedIdentities();
     }
 
     public async Task CreateUserAsync(
@@ -103,12 +103,26 @@ public class Keycloak : IKeycloak
             keycloakOptions.Value.Realm,
             briefRepresentation: true,
             enabled: enabled,
+            max: -1,
             cancellationToken: cancellationToken);
 
         return users
             .Where(u => !string.IsNullOrWhiteSpace(u.Username))
             .Select(u => (u.Username!, u.Id!)).ToHashSet();
     }
+
+    public async Task<IReadOnlyList<KeycloakUser>> GetUsersAsync(bool? enabled, CancellationToken cancellationToken = default)
+    {
+        var users = await keycloakClient.UsersAll3Async(
+            keycloakOptions.Value.Realm,
+            briefRepresentation: false,
+            enabled: enabled,
+            max: -1,
+            cancellationToken: cancellationToken);
+
+        return users.Select(u => u.ToKeycloakUser()).ToList();
+    }
+
 
     public async Task DeleteUserAsync(string userId, CancellationToken cancellationToken = default)
     {

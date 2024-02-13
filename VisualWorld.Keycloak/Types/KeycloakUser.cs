@@ -1,7 +1,8 @@
 ﻿namespace VisualWorld.Keycloak;
 
-public sealed record KeycloakUser(string Id)
+public record KeycloakUser
 {
+    public string Id { get; init; } = string.Empty;
     public string? Username { get; init; }
 
     public bool Enabled { get; init; }
@@ -13,9 +14,6 @@ public sealed record KeycloakUser(string Id)
     public string? FirstName { get; init; }
 
     public string? LastName { get; init; }
-
-    public IReadOnlyList<KeycloakFederatedIdentity> FederatedIdentities { get; init; } =
-        Array.Empty<KeycloakFederatedIdentity>();
 
     public IReadOnlyList<string> RequiredActions { get; init; } = Array.Empty<string>();
 }
